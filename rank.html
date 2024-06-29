@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+    <style>
+        body {
+            font-family: 'Audiowide', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            font-size: 2em;
+            text-align: center;
+        }
+        .info {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .info div {
+            margin: 0 20px;
+        }
+        table {
+            width: 50%;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #000;
+        }
+        td {
+            background-color: #fff;
+            color: #000;
+        }
+        th {
+            background-color: #fff;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student Rank</h1>
+    <div class="info">
+        <div>
+            <strong>Name:</strong> <span id="student-name"></span>
+        </div>
+        <div>
+            <strong>Class:</strong> <span id="student-class"></span>
+        </div>
+        <div>
+            <strong>Section:</strong> <span id="student-section"></span>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Rank</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Telugu</td>
+                <td id="telugumarks"></td>
+                <td id="telugugrade"></td>
+                <td id="telugurank"></td>
+            </tr>
+            <tr>
+                <td>English</td>
+                <td id="englishmarks"></td>
+                <td id="englishgrade"></td>
+                <td id="englishrank"></td>
+            </tr>
+            <tr>
+                <td>Maths</td>
+                <td id="mathsmarks"></td>
+                <td id="mathsgrade"></td>
+                <td id="mathsrank"></td>
+            </tr>
+            <tr>
+                <td>Science</td>
+                <td id="sciencemarks"></td>
+                <td id="sciencegrade"></td>
+                <td id="sciencerank"></td>
+            </tr>
+            <tr>
+                <td>Social</td>
+                <td id="socialmarks"></td>
+                <td id="socialgrade"></td>
+                <td id="socialrank"></td>
+            </tr>
+        </tbody>
+    </table>
+    <h2>Final Rank: <span id="final-rank"></span></h2>
+    <script>
+        function getQueryParam(param) {
+            var urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+        
+
+        function calculateGrade(marks) {
+            if (marks >= 90) {
+                return 'A+';
+            } else if (marks >= 80) {
+                return 'A';
+            } else if (marks >= 75) {
+                return 'B+';
+            } else if (marks >= 65) {
+                return 'B';
+            } else if (marks >= 55) {
+                return 'C';
+            } else if (marks >= 45) {
+                return 'D';
+            } else if (marks >= 36) {
+                return 'E';
+            } else {
+                return 'F';
+            }
+        }
+
+        function calculateRank(grade) {
+            switch (grade) {
+                case 'A+':
+                    return 1;
+                case 'A':
+                    return 2;
+                case 'B+':
+                    return 3;
+                case 'B':
+                    return 4;
+                case 'C':
+                    return 5;
+                case 'D':
+                    return 6;
+                case 'E':
+                    return 7;
+                case 'F':
+                    return 8;
+                default:
+                    return 8;
+            }
+        }
+
+         function calculateFinalRank(subjectRanks) {
+            if (subjectRanks.includes(8)) {
+                return 'Rank Unavailable';
+            } else {
+                var sumRanks = subjectRanks.reduce((total, rank) => total + rank, 0);
+                return Math.floor(sumRanks / subjectRanks.length); // Round down to remove decimals
+            }
+        }
+
+        var name = getQueryParam('name');
+        var studentClass = getQueryParam('class');
+        var section = getQueryParam('section');
+        var telugu = parseFloat(getQueryParam('telugu'));
+        var english = parseFloat(getQueryParam('english'));
+        var maths = parseFloat(getQueryParam('maths'));
+        var science = parseFloat(getQueryParam('science'));
+        var social = parseFloat(getQueryParam('social'));
+
+        document.getElementById('student-name').textContent = decodeURIComponent(name);
+        document.getElementById('student-class').textContent = decodeURIComponent(studentClass);
+        document.getElementById('student-section').textContent = decodeURIComponent(section);
+        document.getElementById('telugumarks').textContent = telugu.toFixed(2);
+        document.getElementById('englishmarks').textContent = english.toFixed(2);
+        document.getElementById('mathsmarks').textContent = maths.toFixed(2);
+        document.getElementById('sciencemarks').textContent = science.toFixed(2);
+        document.getElementById('socialmarks').textContent = social.toFixed(2);
+
+        var teluguGrade = calculateGrade(telugu);
+        var englishGrade = calculateGrade(english);
+        var mathsGrade = calculateGrade(maths);
+        var scienceGrade = calculateGrade(science);
+        var socialGrade = calculateGrade(social);
+
+        document.getElementById('telugugrade').textContent = teluguGrade;
+        document.getElementById('englishgrade').textContent = englishGrade;
+        document.getElementById('mathsgrade').textContent = mathsGrade;
+        document.getElementById('sciencegrade').textContent = scienceGrade;
+        document.getElementById('socialgrade').textContent = socialGrade;
+
+        var teluguRank = calculateRank(teluguGrade);
+        var englishRank = calculateRank(englishGrade);
+        var mathsRank = calculateRank(mathsGrade);
+        var scienceRank = calculateRank(scienceGrade);
+        var socialRank = calculateRank(socialGrade);
+
+        document.getElementById('telugurank').textContent = teluguRank;
+        document.getElementById('englishrank').textContent = englishRank;
+        document.getElementById('mathsrank').textContent = mathsRank;
+        document.getElementById('sciencerank').textContent = scienceRank;
+        document.getElementById('socialrank').textContent = socialRank;
+
+        var subjectRanks = [teluguRank, englishRank, mathsRank, scienceRank, socialRank];
+        var finalRank = calculateFinalRank(subjectRanks);
+
+        document.getElementById('final-rank').textContent = finalRank;
+    </script>
+</body>
+</html>
