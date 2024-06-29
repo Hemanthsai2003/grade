@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide">
+<style>
+    input[type=text],input[type=number],input[type=submit],select {
+      width :190px;
+      box-sizing: border-box;
+      border: 4px solid lightgray;
+      border-radius: 16px;
+      font-size: 16px;
+      background-color: black;
+      color: white;
+      background-position: 10px 10px;
+      background-repeat: no-repeat;
+      padding: 12px 20px 12px 40px;
+      transition: width 0.6s ease-in-out;
+    }
+    input[type=text]:focus{
+        width: 100%;
+    }
+    form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    h1 {
+            text-align: center;
+            font-family: 'Audiowide', sans-serif;
+        }
+        button[type=submit] {
+            width: 190px;
+            box-sizing: border-box;
+            border: 4px solid lightgray;
+            border-radius: 16px;
+            font-size: 16px;
+            background-color: white;
+            color: black;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type=submit]:hover {
+            background-color: gray;
+        }
+</style>
+</head>
+<body>
+    <h1 >progress card</h1>
+<form onsubmit="return validateForm()">
+
+  <input type="text" id="name" name="name" placeholder="Name please..." required><br>
+    <label for="class">Select your class</label>
+      <select id="class" name="class" required>
+          <option value=""></option>
+          <option value="VII">SEVENTH</option>
+          <option value="VIII">EIGTH</option>
+          <option value="IX">NINTH</option>
+      </select><br>
+      <label for="section">Select your section</label>
+      <select id="section" name="section" required>
+          <option value=""></option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="C">C</option>
+          <option value="D">D</option>
+      </select><br>
+    <input type="number" id="maths" placeholder = "MATHS" required>
+    <input type="number" id="science" placeholder = "SCIENCE" required>
+    <input type="number" id="social" placeholder = "SOCIAL" required>
+    <input type="number" id="english" placeholder = "ENGLISH" required>
+    <input type="number" id="telugu" placeholder = "TELUGU" required><br><br>
+    <button type="submit">Get Rank</button>
+
+</form>
+<script>
+    function validateForm() {
+            var nameInput = document.getElementById("name").value.trim();
+            var lettersOnly = /^[a-zA-Z\s]*$/;
+
+            if (!lettersOnly.test(nameInput)) {
+                alert("Please enter a valid name with letters and spaces only.");
+                return false;
+            }
+
+            var subjects = ['maths', 'science', 'social', 'english', 'telugu'];
+            var totalMarks = 0;
+            for (var i = 0; i < subjects.length; i++) {
+                var value = document.getElementById(subjects[i]).value;
+                if (isNaN(value) || value < 0 || value > 100) {
+                    alert("Please enter valid marks between 0 and 100 for " + subjects[i].toUpperCase());
+                    return false;
+                }
+                totalMarks += parseFloat(value);
+            }
+            var average = totalMarks / subjects.length;
+            window.location.href = "rank.html?name=" + encodeURIComponent(nameInput) +
+                "&class=" + encodeURIComponent(document.getElementById("class").value) +
+                "&section=" + encodeURIComponent(document.getElementById("section").value) +
+                "&telugu=" + encodeURIComponent(document.getElementById("telugu").value) +
+                "&english=" + encodeURIComponent(document.getElementById("english").value) +
+                "&maths=" + encodeURIComponent(document.getElementById("maths").value) +
+                "&science=" + encodeURIComponent(document.getElementById("science").value) +
+                "&social=" + encodeURIComponent(document.getElementById("social").value) +
+                "&average=" + average.toFixed(2);
+
+            return false;
+        }
+</script>
+</body>
+</html>
